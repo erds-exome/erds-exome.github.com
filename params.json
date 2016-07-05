@@ -1,0 +1,6 @@
+{
+  "name": "Erds-exome.GitHub.com",
+  "tagline": "ERDS-exome: a hybrid approach for copy number variants detection from whole-exome sequencing data",
+  "body": "### ERDS-exome\r\nAlthough many tools have been developed for inferring copy-number variants (CNVs) from whole-exome sequencing (WES) data, their efficiencies are still far more incomparable with whole-genome sequencing (WGS) CNV calling tools. There remains a need for developing an effective tool, which can achieve a considerable power in WES CNV discovery process. Here, we introduce a new method, estimation by read depth with single-nucleotide variants in exome sequencing data (ERDS-exome). Based on our systematic evaluations of real data from 1000 Genomes Project with other state-of-art tools, we found that ERDS-exome demonstrates a comparable or even better sensitivity for both common and rare CNVs. Meanwhile, ERDS-exome can also provide a higher specificity than other tools.",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
