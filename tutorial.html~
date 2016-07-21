@@ -36,12 +36,15 @@
       	<div id="inner_left">
       		<div>
       			<a href="index.html">Home</a>
-          </div>
+      		</div>
+      		<div>
+      			<a href="index.html">Download</a>
+      		</div>
       		<div>
       			<a href="tutorial.html">Tutorial</a>
       		</div>
       		<div>
-      			<a href="index.html">Quick Start</a>
+      			<a href="quickstart.html">Quick Start</a>
       		</div>
       		<div>
       			<a href="index.html">FAQ</a>
@@ -50,10 +53,54 @@
       	<div id="inner_right">
 		        <h3>
 				<a id="erds-exome" class="anchor" href="#erds-exome" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
-				ERDS-exome
+				Turorial
 				</h3>
-
-				<p>Although many tools have been developed for inferring copy-number variants (CNVs) from whole-exome sequencing (WES) data, their efficiencies are still far more incomparable with whole-genome sequencing (WGS) CNV calling tools. There remains a need for developing an effective tool, which can achieve a considerable power in WES CNV discovery process. Here, we introduce a new method, estimation by read depth with single-nucleotide variants in exome sequencing data (ERDS-exome). Based on our systematic evaluations of real data from 1000 Genomes Project with other state-of-art tools, we found that ERDS-exome demonstrates a comparable or even better sensitivity for both common and rare CNVs. Meanwhile, ERDS-exome can also provide a higher specificity than other tools.</p>
+        <p>
+          This is a general tutorail for using ERDS-exome. You can also try ERDS-exome simply using test data. Please read the <a href="quickstart.html">Quick Start Guide</a>.
+        </p>
+        <p>
+          <h5>
+            General command structure
+          </h5>
+          ERDS-exome is a command-line python program (erds_exome.py). There are several sub-commands, each with a set of command line options. In general, the ERDS-exome pipeline consists of the following steps: 
+        </p>
+        <p>1. Calculate RPKM values for all samples. </p>
+<pre>
+  python erds_exome.py rpkm [...]
+</pre>
+        <p>2. Merge RPKM values of all samples into a matrix. </p>
+<pre>
+  python erds_exome.py merge_rpkm [...]
+</pre>
+        <p>3. Filter RPKM matrix by filter parameters.</p>
+<pre>
+  python erds_exome.py filter [...]
+</pre>
+        <p>4. Normalization.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method 1: Normalize RPKM matrix by mappability, GC content and exon length.</p>
+<pre>
+  python erds_exome.py norm_rpkm [...]
+</pre>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method 2: Normalize RPKM matrix by singular value decomposition (SVD).</p>
+	<pre>
+	python erds_exome.py svd [...]
+	</pre>
+        <p>5. CNV calling.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method 1: CNV calling by SVD.</p>  
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method 2: CNV calling by baseline.</p>
+<pre>
+  python erds_exome.py discover [...]
+</pre>
+        <p>6. Merge CNV calling results.</p>
+<pre>
+  python erds_exome.py merge [...]
+</pre>
+<pre>
+  python $code_path/jxcnv.py rpkm \
+  --input $bamlist_file \
+  --target $target_file \
+  --output $output_path
+</pre>
 		</div>
       </section>
     </div>
