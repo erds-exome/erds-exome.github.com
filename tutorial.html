@@ -166,20 +166,6 @@ chr&#9;start&#9;stop
  </blockquote>
 
 <blockquote>
-      <h4>5. Normalization</h4>
-      <strong>Method 1:</strong> Normalize RPKM matrix by three steps, including mappability, GC content and exon length.
-<pre>
-  python erds_exome.py norm_rpkm \
-  --rpkm_matrix $RPKM_matrix.raw.filtered
-</pre>
-			<strong>Method 2:</strong> Normalize RPKM matrix by SVD.
-<pre>
-  python erds_exome.py svd \
-  --rpkm_matrix $RPKM_matrix.raw.filtered
-</pre>
- </blockquote>
-
-<blockquote>
       <h4>6. CNV calling</h4>
       <strong>Method 1:</strong> CNV calling by SVD. User can specify the HMM parameters file by '--params'. If '--hetsnp' is set to 'True', then the SNV heterozygosity information will be included. If '--tagsnp' is set to 'True', then the tagSNP linkage disequilibrium (LD) information will be included and a tagSNP file should be specified by '--tagsnp_file'. If user specify a sample name by '--sample', ERDS-exome will only call CNV for this sample. Otherwise ERDS-exome will call CNV for all samples.
 <pre>
