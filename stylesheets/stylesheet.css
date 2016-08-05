@@ -296,13 +296,16 @@ Full-Width Styles
   border-bottom-right-radius: 2px;
 }
 
-#header_wrap {
+#header_wrap_backup {
   background: #212121;
   background: -moz-linear-gradient(top, #373737, #212121);
   background: -webkit-linear-gradient(top, #373737, #212121);
   background: -ms-linear-gradient(top, #373737, #212121);
   background: -o-linear-gradient(top, #373737, #212121);
   background: linear-gradient(top, #373737, #212121);
+}
+#header_wrap {
+  background: url(../images/header.PNG) no-repeat bottom left;
 }
 
 #header_wrap .inner {
