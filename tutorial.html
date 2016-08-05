@@ -21,6 +21,14 @@
           <h1 id="project_title">ERDS-exome</h1>
           <h2 id="project_tagline">A hybrid approach for copy number variants detection from whole-exome sequencing data</h2>
 
+          <div id="downloads">
+            <div class="tar_download_link" onclick="document.location='https://erds-exome.github.io/erds-exome.zip';">
+            <a href="erds-exome.zip">werwerwe</a>
+            </div>
+            <div class="zip_download_link" onclick="document.location='https://erds-exome.github.io/erds-exome.tar.gz';">
+            <a href="erds-exome.zip">werwerw</a>
+            </div>
+          </div>
         </header>
     </div>
 
@@ -31,46 +39,175 @@
       		<div>
       			<a href="index.html">Home</a>
       		</div>
-      		<div>
-      			<a href="index.html">Download</a>
-      		</div>
+      		
       		<div>
       			<a href="tutorial.html">Tutorial</a>
       		</div>
       		<div>
-      			<a href="quickstart.html">Quick Start</a>
+      			<a href="quick_start.html">Quick Start</a>
       		</div>
       		<div>
-      			<a href="index.html">FAQ</a>
+      			<a href="contact.html">Contact</a>
       		</div>
       	</div>
       	<div id="inner_right">
-		        <h3>
+		    <h3>
 				<a id="erds-exome" class="anchor" href="#erds-exome" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
 				Turorial
 				</h3>
         <p>
-          This is a general tutorail for using ERDS-exome. You can also try ERDS-exome simply using test data. Please read the <a href="quickstart.html">Quick Start Guide</a>.
+         This is a general tutorail for using ERDS-exome. You can also try ERDS-exome simply using test data. Please read the <a href="quick_start.html">Quick Start Guide</a>.
         </p>
         <p>
-          <h5>
+          <h4>
             General command structure
-          </h5>
-          ERDS-exome is a command-line python program (conifer.py). There are several sub-commands, each with a set of command line options. In general, the ERDS-exome pipeline consists of the following steps: 
+          </h4>
+          ERDS-exome is a command-line python program (erds_exome.py). There are several sub-commands, each with a set of command line options. In general, the ERDS-exome pipeline consists of the following steps: 
         </p>
-        <p>
-          1. Calculate RPKM values for all samples. 
-        </p>
-        <p>
-          2. Merge RPKM values of all samples into a matrix. 
-        </p>
-        <p>
-          3. Filter  
-        </p>
-				<pre>python $code_path/jxcnv.py rpkm \
---input $bamlist_file \
---target $target_file \
---output $output_path</pre>
+        <p><strong>1. Calculate RPKM values for all samples.</strong></p>
+<pre>
+  python erds_exome.py rpkm [...]
+</pre>
+        <p><strong>2. Merge RPKM values of all samples into a matrix.</strong></p>
+<pre>
+  python erds_exome.py merge_rpkm [...]
+</pre>
+        <p><strong>3. Filter RPKM matrix by filter parameters.</strong></p>
+<pre>
+  python erds_exome.py filter [...]
+</pre>
+        <p><strong>4. Normalization.</strong></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Method 1:</strong> Normalize RPKM matrix by mappability, GC content and exon length.</p>
+<pre>
+  python erds_exome.py norm_rpkm [...]
+</pre>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Method 2:</strong> Normalize RPKM matrix by singular value decomposition (SVD).</p>
+<pre>
+  python erds_exome.py svd [...]
+</pre>
+        <p><strong>5. CNV calling.</strong></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Method 1:</strong> CNV calling by SVD.</p>  
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Method 2:</strong> CNV calling by baseline.</p>
+<pre>
+  python erds_exome.py discover [...]
+</pre>
+        <p><strong>6. Merge CNV calling results.</strong></p>
+<pre>
+  python erds_exome.py merge [...]
+</pre>
+
+    <blockquote>
+      <h4>0. Requirements and Setup</h4>
+      ERDS-exome requires Python v2.7 (Python 3 is not yet supported). And NumPy package should be installed. If you want to calculate RPKM values from BAM files, pysam is required. Pysam is also used to calculate GC content. In addition, bx-python is required to calculate mappability, and PyVCF is required to generate SNV heterozygosity information and tagSNP linkage disequilibrium (LD) information.
+    </blockquote>
+
+    <blockquote>
+      <h4>1. Create probe/target definition file</h4>
+      This file defines the chr:start-stop coordinates for the probes/targets in the exome capture. It should be tab-delimited with the following header and columns:
+    
+<pre>
+chr&#9;start&#9;stop
+1&#9;14642&#9;14882
+1&#9;14943&#9;15063
+1&#9;15751&#9;15990
+1&#9;16599&#9;16719
+1&#9;16834&#9;17074
+</pre>
+</blockquote>
+
+    <blockquote>
+      <h4>2. Create RPKM files</h4>
+      Using pysam package, ERDS-exome can calculate RPKM from aligned and indexed BAM files.
+<pre>
+  python erds_exome.py rpkm \
+  --input $bamlist_file \
+  --target $target_file \
+  --output $output_path
+</pre>
+			Where $target_file is the probes/target created in former step, $bamlist_file includes the bam files of all samples.
+    </blockquote>
+
+<blockquote>
+      <h4>3. Merge RPKM files</h4>
+      Merge the RPKM files from different samples into a matirx.
+<pre>
+  python erds_exome.py merge_rpkm \
+	--rpkm_dir $rpkm_files \
+	--target $target_file
+</pre>
+			Where $rpkm_files includes all RPKM files. There should not be other files except RPKM files in $rpkm_files.
+ </blockquote>
+
+ <blockquote>
+      <h4>4. Filter RPKM matrix</h4>
+      Filter the RPKM matrix by mappability, 
+<pre>
+  python erds_exome.py filter \
+  --rpkm_matrix $RC_matrix.raw \
+  --ref_file $ref \
+  --map_file $mapability_file \
+  --filter_params $filter_params_file
+</pre>
+			Where $RC_matrix.raw is the targets by samples matirx generated in former step. $filter_params_file contains the filter parameters.
+ </blockquote>
+
+<blockquote>
+      <h4>5. Normalization</h4>
+      <strong>Method 1:</strong> Normalize RPKM matrix by three steps, including mappability, GC content and exon length.
+<pre>
+  python erds_exome.py norm_rpkm \
+  --rpkm_matrix $RPKM_matrix.raw.filtered
+</pre>
+			<strong>Method 2:</strong> Normalize RPKM matrix by SVD.
+<pre>
+  python erds_exome.py svd \
+  --rpkm_matrix $RPKM_matrix.raw.filtered
+</pre>
+ </blockquote>
+
+<blockquote>
+      <h4>6. CNV calling</h4>
+      <strong>Method 1:</strong> CNV calling by SVD. User can specify the HMM parameters file by '--params'. If '--hetsnp' is set to 'True', then the SNV heterozygosity information will be included. If '--tagsnp' is set to 'True', then the tagSNP linkage disequilibrium (LD) information will be included and a tagSNP file should be specified by '--tagsnp_file'. If user specify a sample name by '--sample', ERDS-exome will only call CNV for this sample. Otherwise ERDS-exome will call CNV for all samples.
+<pre>
+  python erds_exome.py discover \
+  --params params.txt \
+  --datafile $RPKM_matrix.raw.filtered.SVD \
+  --mode svd \
+  --sample $sample_name \
+  --vcf=$snv_vcf_file \
+  --hetsnp True \
+  --tagsnp Ture \
+  --tagsnp_file=$tagsnp_file \
+  --output $sample_name.svd.maq20.Het.Tag.cnv
+</pre>
+			<strong>Method 2:</strong> CNV calling by baseline. All parameters are the same with CNV calling by SVD, except that '--mode' is set to 'baseline'.
+<pre>
+  python erds_exome.py discover \
+  --params params.txt \
+  --datafile $RPKM_matrix.raw.filtered.normalized \
+  --mode baseline \
+  --sample $sample_name \
+  --vcf $snv_vcf_file \
+  --hetsnp True \
+  --tagsnp Ture \
+  --tagsnp_file $tagsnp_file \
+  --output $sample_name.RC.baseline.maq20.Het.Tag.cnv
+</pre>
+ </blockquote>
+
+
+<blockquote>
+      <h4>7. Merge CNV calling results</h4>
+			Merge CNV calling results from different methods.      
+<pre>
+  python erds_exome.py merge \
+  --datafile_svd $sample_name.svd.maq20.Het.Tag.cnv \
+  --datafile_dis $sample_name.baseline.maq20.Het.Tag.cnv \
+  --output $sample_name.merged.maq20.Het.Tag.cnv
+</pre>
+ </blockquote>
+
+
 		</div>
       </section>
     </div>

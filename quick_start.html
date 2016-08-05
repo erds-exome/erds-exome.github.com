@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Erds-exome.GitHub.com : ERDS-exome: a hybrid approach for copy number variants detection from whole-exome sequencing data">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>ERDS-exome</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/coderChase/jxcnv">View on GitHub</a>
+
+          <h1 id="project_title">ERDS-exome</h1>
+          <h2 id="project_tagline">A hybrid approach for copy number variants detection from whole-exome sequencing data</h2>
+
+          <div id="downloads">
+            <div class="tar_download_link" onclick="document.location='https://erds-exome.github.io/erds-exome.zip';">
+            <a href="erds-exome.zip">werwerwe</a>
+            </div>
+            <div class="zip_download_link" onclick="document.location='https://erds-exome.github.io/erds-exome.tar.gz';">
+            <a href="erds-exome.zip">werwerw</a>
+            </div>
+          </div>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+      	<div id="inner_left">
+      		<div>
+      			<a href="index.html">Home</a>
+      		</div>
+      		
+      		<div>
+      			<a href="tutorial.html">Tutorial</a>
+      		</div>
+      		<div>
+      			<a href="quick_start.html">Quick Start</a>
+      		</div>
+      		<div>
+      			<a href="contact.html">Contact</a>
+      		</div>
+      	</div>
+      	<div id="inner_right">
+		    <h3>
+				<a id="erds-exome" class="anchor" href="#erds-exome" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+				Quick Start Guide
+				</h3>
+        <p>
+          This is a step-by-step guide for using ERDS-exome. You can try ERDS-exome by usring ERDS-exome with toy data which can be downloaded <a href="erds-exome-with-toy-data.zip">here</a>. Generating RPKM matrix from BAM files could cost a lot of time. For conveience, user can begin with RPKM_matrix.raw.
+        </p>
+       
+ <blockquote>
+      <h4>0. Filter RPKM matrix</h4>
+      Filter the RPKM matrix by GC content, mappability and exon length. For convenience, we have calculated the GC content, mappability and exon length of the targets for users. The results are stored in the files named "GC_percentage", "mapping_ability" and "exon_length" respectively. User can save time by using these files directly. User can also calculate GC content and mappability manually by specifying the "ref_file" and "map_file" parameters.
+<pre>
+  python erds_exome.py filter \
+  --rpkm_matrix RPKM_matrix.raw \
+  --filter_params filter_params.txt
+</pre>
+ </blockquote>
+
+<blockquote>
+      <h4>1. Normalization</h4>
+      <strong>Method 1:</strong> Normalize RPKM matrix by three steps, including mappability, GC content and exon length.
+<pre>
+  python erds_exome.py norm_rpkm \
+  --rpkm_matrix RPKM_matrix.raw.filtered
+</pre>
+			<strong>Method 2:</strong> Normalize RPKM matrix by SVD.
+<pre>
+  python erds_exome.py svd \
+  --rpkm_matrix RPKM_matrix.raw.filtered
+</pre>
+ </blockquote>
+
+<blockquote>
+      <h4>2. CNV calling</h4>
+      <strong>Method 1:</strong> CNV calling by SVD. 
+<pre>
+  python erds_exome.py discover \
+  --params params.txt \
+  --datafile RPKM_matrix.raw.filtered.SVD \
+  --mode pooled \
+  --sample NA12878 \
+  --vcf NA12878.vcf.gz \
+  --hetsnp True \
+  --tagsnp Ture \
+  --tagsnp_file tagSNP_hg19.txt \
+  --output NA12878.pooled.Het.Tag.cnv
+</pre>
+			<strong>Method 2:</strong> CNV calling by baseline.
+<pre>
+  python erds_exome.py discover \
+  --params params.txt \
+  --datafile RPKM_matrix.raw.filtered.normalized \
+  --mode single \
+  --sample NA12878 \
+  --vcf NA12878.vcf.gz \
+  --hetsnp True \
+  --tagsnp Ture \
+  --tagsnp_file tagSNP_hg19.txt \
+  --output NA127878.single.Het.Tag.cnv
+</pre>
+ </blockquote>
+
+
+<blockquote>
+      <h4>3. Merge CNV calling results</h4>
+			Merge CNV calling results from different methods.      
+<pre>
+  python erds_exome.py merge \
+  --datafile_svd NA12878.pooled.Het.Tag.cnv \
+  --datafile_dis NA127878.single.Het.Tag.cnv \
+  --output NA12878.merged.maq20.Het.Tag.cnv
+</pre>
+ </blockquote>
+
+
+		</div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
