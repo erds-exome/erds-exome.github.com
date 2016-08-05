@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Erds-exome.GitHub.com : ERDS-exome: a hybrid approach for copy number variants detection from whole-exome sequencing data">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>ERDS-exome</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/coderChase/jxcnv">View on GitHub</a>
+
+          <h1 id="project_title">ERDS-exome</h1>
+          <h2 id="project_tagline">A hybrid approach for copy number variants detection from whole-exome sequencing data</h2>
+
+          <div id="downloads">
+            <div class="tar_download_link">
+            </div>
+            <div class="zip_download_link">
+            </div>
+          </div>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+      	<div id="inner_left">
+      		<div>
+      			<a href="index.html">Home</a>
+      		</div>
+      		<div>
+      			<a href="index.html">Download</a>
+      		</div>
+      		<div>
+      			<a href="tutorial.html">Tutorial</a>
+      		</div>
+      		<div>
+      			<a href="quickstart.html">Quick Start</a>
+      		</div>
+      		<div>
+      			<a href="index.html">FAQ</a>
+      		</div>
+      	</div>
+      	<div id="inner_right">
+		        <h3>
+				<a id="erds-exome" class="anchor" href="#erds-exome" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+				Turorial
+				</h3>
+        <p>
+          This is a general tutorail for using ERDS-exome. You can also try ERDS-exome simply using test data. Please read the <a href="quickstart.html">Quick Start Guide</a>.
+        </p>
+        <p>
+          <h5>
+            General command structure
+          </h5>
+          ERDS-exome is a command-line python program (erds_exome.py). There are several sub-commands, each with a set of command line options. In general, the ERDS-exome pipeline consists of the following steps: 
+        </p>
+        <p>1. Calculate RPKM values for all samples. </p>
+<pre>
+  python erds_exome.py rpkm [...]
+</pre>
+        <p>2. Merge RPKM values of all samples into a matrix. </p>
+<pre>
+  python erds_exome.py merge_rpkm [...]
+</pre>
+        <p>3. Filter RPKM matrix by filter parameters.</p>
+<pre>
+  python erds_exome.py filter [...]
+</pre>
+        <p>4. Normalization.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method 1: Normalize RPKM matrix by mappability, GC content and exon length.</p>
+<pre>
+  python erds_exome.py norm_rpkm [...]
+</pre>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method 2: Normalize RPKM matrix by singular value decomposition (SVD).</p>
+	<pre>
+	python erds_exome.py svd [...]
+	</pre>
+        <p>5. CNV calling.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method 1: CNV calling by SVD.</p>  
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method 2: CNV calling by baseline.</p>
+<pre>
+  python erds_exome.py discover [...]
+</pre>
+        <p>6. Merge CNV calling results.</p>
+<pre>
+  python erds_exome.py merge [...]
+</pre>
+<pre>
+  python $code_path/jxcnv.py rpkm \
+  --input $bamlist_file \
+  --target $target_file \
+  --output $output_path
+</pre>
+		</div>
+      </section>
+    </div>
+
+
+
+
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
