@@ -47,6 +47,9 @@
       			<a href="quick_start.html">Quick Start</a>
       		</div>
       		<div>
+      			<a href="download.html">Download</a>
+      		</div>
+      		<div>
       			<a href="contact.html">Contact</a>
       		</div>
       	</div>
@@ -56,7 +59,7 @@
 				Turorial
 				</h3>
         <p>
-         This is a general tutorail for using ERDS-exome. You can also try ERDS-exome simply using test data. Please read the <a href="quick_start.html">Quick Start Guide</a>.
+         This is a general tutorial for using ERDS-exome. You can also try ERDS-exome simply using test data. Please read the <a href="quick_start.html">Quick Start Guide</a>.
         </p>
         <p>
           <h4>
@@ -77,17 +80,17 @@
   python erds_exome.py filter [...]
 </pre>
         <p><strong>4. Normalization.</strong></p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Method 1:</strong> Normalize RPKM matrix by mappability, GC content and exon length.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Mode 1:</strong> Single-sample based normalization, normalize RPKM matrix by mappability, GC content and exon length.</p>
 <pre>
   python erds_exome.py norm_rpkm [...]
 </pre>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Method 2:</strong> Normalize RPKM matrix by singular value decomposition (SVD).</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Mode 2:</strong> Pooled-sample based normalization, normalize RPKM matrix by singular value decomposition (SVD).</p>
 <pre>
   python erds_exome.py svd [...]
 </pre>
         <p><strong>5. CNV calling.</strong></p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Method 1:</strong> CNV calling by SVD.</p>  
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Method 2:</strong> CNV calling by baseline.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Mode 1:</strong> CNV calling by single-sample mode.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Mode 2:</strong> CNV calling by pooled-sample mode.</p>  
 <pre>
   python erds_exome.py discover [...]
 </pre>
@@ -98,7 +101,7 @@
 
     <blockquote>
       <h4>0. Requirements and Setup</h4>
-      ERDS-exome requires Python v2.7 (Python 3 is not yet supported). And NumPy package should be installed. If you want to calculate RPKM values from BAM files, pysam is required. Pysam is also used to calculate GC content. In addition, bx-python is required to calculate mappability, and PyVCF is required to generate SNV heterozygosity information and tagSNP linkage disequilibrium (LD) information.
+      ERDS-exome requires Python v2.7 (Python 3 is not yet supported). And <a href="http://www.numpy.org/">NumPy</a> package should be installed. If you want to calculate RPKM values from BAM files, <a href="https://github.com/pysam-developers/pysam">pysam</a> is required. Pysam is also used to calculate GC content. In addition, <a href="https://pypi.python.org/pypi/bx-python/0.7.3">bx-python</a> is required to calculate mappability, and PyVCF is required to generate SNV heterozygosity information and tagSNP linkage disequilibrium (LD) information.
     </blockquote>
 
     <blockquote>
@@ -113,6 +116,7 @@ chr&#9;start&#9;stop
 1&#9;16599&#9;16719
 1&#9;16834&#9;17074
 </pre>
+Where the first column represents the number of chromsome, and the second and third columns refer to the start index and end index of target respectively. ERDS-exome also support target file of <strong>bed</strong> format.
 </blockquote>
 
     <blockquote>
@@ -121,10 +125,11 @@ chr&#9;start&#9;stop
 <pre>
   python erds_exome.py rpkm \
   --input $bamlist_file \
+  --map $map_score
   --target $target_file \
   --output $output_path
 </pre>
-			Where $target_file is the probes/target created in former step, $bamlist_file includes the bam files of all samples.
+			Where $target_file is the probes/target created in former step, $bamlist_file includes the bam files of all samples, and $map_score is the minimum mapping quality score of reads.
     </blockquote>
 
 <blockquote>
@@ -148,17 +153,19 @@ chr&#9;start&#9;stop
   --map_file $mapability_file \
   --filter_params $filter_params_file
 </pre>
-			Where $RC_matrix.raw is the targets by samples matirx generated in former step. $filter_params_file contains the filter parameters.
+Where $RC_matrix.raw is the targets by samples matrix generated in former step. $ref is human reference file (hg19) which can be downloaded <a href="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/phase2_reference_assembly_sequence/">here</a> and $map_file refers to mappability file which can be downloaded <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeMapability/wgEncodeCrgMapabilityAlign100mer.bigWig">here</a>. $filter_params_file contains the filter parameters. Specifically, the format of parameter file is like:
+<pre>
+</pre>
  </blockquote>
 
 <blockquote>
       <h4>5. Normalization</h4>
-      <strong>Method 1:</strong> Normalize RPKM matrix by three steps, including mappability, GC content and exon length.
+      <strong>Mode 1:</strong> Normalize RPKM matrix by three steps, including mappability, GC content and exon length.
 <pre>
   python erds_exome.py norm_rpkm \
   --rpkm_matrix $RPKM_matrix.raw.filtered
 </pre>
-			<strong>Method 2:</strong> Normalize RPKM matrix by SVD.
+			<strong>Mode 2:</strong> Normalize RPKM matrix by SVD.
 <pre>
   python erds_exome.py svd \
   --rpkm_matrix $RPKM_matrix.raw.filtered
@@ -167,31 +174,31 @@ chr&#9;start&#9;stop
 
 <blockquote>
       <h4>6. CNV calling</h4>
-      <strong>Method 1:</strong> CNV calling by SVD. User can specify the HMM parameters file by '--params'. If '--hetsnp' is set to 'True', then the SNV heterozygosity information will be included. If '--tagsnp' is set to 'True', then the tagSNP linkage disequilibrium (LD) information will be included and a tagSNP file should be specified by '--tagsnp_file'. If user specify a sample name by '--sample', ERDS-exome will only call CNV for this sample. Otherwise ERDS-exome will call CNV for all samples.
-<pre>
-  python erds_exome.py discover \
-  --params params.txt \
-  --datafile $RPKM_matrix.raw.filtered.SVD \
-  --mode svd \
-  --sample $sample_name \
-  --vcf=$snv_vcf_file \
-  --hetsnp True \
-  --tagsnp Ture \
-  --tagsnp_file=$tagsnp_file \
-  --output $sample_name.svd.maq20.Het.Tag.cnv
-</pre>
-			<strong>Method 2:</strong> CNV calling by baseline. All parameters are the same with CNV calling by SVD, except that '--mode' is set to 'baseline'.
+	<strong>Mode 1:</strong> CNV calling by single sample mode. User can specify the HMM parameters file by '--params'. If '--hetsnp' is set to 'True', then the SNV heterozygosity information will be included. If '--tagsnp' is set to 'True', then the tagSNP linkage disequilibrium (LD) information will be included and a tagSNP file should be specified by '--tagsnp_file'. '--hetsnp' and '--tagsnp' are optional parameters. The default options of them are 'False'. If user specify a sample name by '--sample', ERDS-exome will only call CNV for this sample. Otherwise ERDS-exome will call CNV for all samples. 
 <pre>
   python erds_exome.py discover \
   --params params.txt \
   --datafile $RPKM_matrix.raw.filtered.normalized \
-  --mode baseline \
+  --mode pooled \
   --sample $sample_name \
   --vcf $snv_vcf_file \
   --hetsnp True \
   --tagsnp Ture \
   --tagsnp_file $tagsnp_file \
-  --output $sample_name.RC.baseline.maq20.Het.Tag.cnv
+  --output $sample_name.RC.single.Het.Tag.cnv
+</pre>
+      <strong>Mode 2:</strong> CNV calling by pooled sample mode. All parameters are the same with CNV calling by single sample mode, except that '--mode' is set to 'pooled'.
+<pre>
+  python erds_exome.py discover \
+  --params params.txt \
+  --datafile $RPKM_matrix.raw.filtered.SVD \
+  --mode single \
+  --sample $sample_name \
+  --vcf=$snv_vcf_file \
+  --hetsnp True \
+  --tagsnp Ture \
+  --tagsnp_file=$tagsnp_file \
+  --output $sample_name.pooled.Het.Tag.cnv
 </pre>
  </blockquote>
 

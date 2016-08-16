@@ -305,7 +305,11 @@ Full-Width Styles
   background: linear-gradient(top, #373737, #212121);
 }
 #header_wrap {
-  background: url(../images/header.PNG) no-repeat bottom left;
+  background-image: url(../images/header.PNG);
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+background-color: black;
 }
 
 #header_wrap .inner {
