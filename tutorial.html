@@ -164,17 +164,17 @@ Where $RC_matrix.raw is the targets by samples matrix generated in former step. 
 <pre>
   23	80	2	5000	0.001
 </pre>
-The five parameters refer to maximum GC content, minimum GC content, minimum mappability value, maximum exon length and minimum RPKM value respectively.
+The five parameters refer to minimum GC content, maximum GC content, minimum mappability value, maximum exon length and minimum RPKM value respectively.
  </blockquote>
 
 <blockquote>
       <h4>5. Normalization</h4>
-      <strong>Mode 1:</strong> Normalize RPKM matrix by three steps, including mappability, GC content and exon length.
+      <strong>In mode 1:</strong> Normalize RPKM matrix by three steps, including mappability, GC content and exon length.
 <pre>
   python erds_exome.py norm_rpkm \
   --rpkm_matrix $RPKM_matrix.raw.filtered
 </pre>
-			<strong>Mode 2:</strong> Normalize RPKM matrix by SVD.
+			<strong>In mode 2:</strong> Normalize RPKM matrix by SVD.
 <pre>
   python erds_exome.py svd \
   --rpkm_matrix $RPKM_matrix.raw.filtered
@@ -183,12 +183,12 @@ The five parameters refer to maximum GC content, minimum GC content, minimum map
 
 <blockquote>
       <h4>6. CNV calling</h4>
-	<strong>Mode 1:</strong> CNV calling by single sample mode. User can specify the HMM parameters file by '--params'. If '--hetsnp' is set to 'True', then the SNV heterozygosity information will be included. If '--tagsnp' is set to 'True', then the tagSNP linkage disequilibrium (LD) information will be included and a tagSNP file should be specified by '--tagsnp_file'. '--hetsnp' and '--tagsnp' are optional parameters. The default options of them are 'False'. If user specify a sample name by '--sample', ERDS-exome will only call CNV for this sample. Otherwise ERDS-exome will call CNV for all samples. 
+	<strong>In mode 1:</strong> CNV calling by single sample mode. User can specify the HMM parameters file by '--params'. If '--hetsnp' is set to 'True', then the SNV heterozygosity information will be included. If '--tagsnp' is set to 'True', then the tagSNP linkage disequilibrium (LD) information will be included and a tagSNP file should be specified by '--tagsnp_file'. '--hetsnp' and '--tagsnp' are optional parameters. The default options of them are 'False'. If user specify a sample name by '--sample', ERDS-exome will only call CNV for this sample. Otherwise ERDS-exome will call CNV for all samples. 
 <pre>
   python erds_exome.py discover \
   --params params.txt \
   --datafile $RPKM_matrix.raw.filtered.normalized \
-  --mode pooled \
+  --mode single \
   --sample $sample_name \
   --vcf $snv_vcf_file \
   --hetsnp True \
@@ -196,12 +196,12 @@ The five parameters refer to maximum GC content, minimum GC content, minimum map
   --tagsnp_file $tagsnp_file \
   --output $sample_name.RC.single.Het.Tag.cnv
 </pre>
-      <strong>Mode 2:</strong> CNV calling by pooled sample mode. All parameters are the same with CNV calling by single sample mode, except that '--mode' is set to 'pooled'.
+      <strong>In mode 2:</strong> CNV calling by pooled sample mode. All parameters are the same with CNV calling by single sample mode, except that '--mode' is set to 'pooled'.
 <pre>
   python erds_exome.py discover \
   --params params.txt \
   --datafile $RPKM_matrix.raw.filtered.SVD \
-  --mode single \
+  --mode pooled \
   --sample $sample_name \
   --vcf=$snv_vcf_file \
   --hetsnp True \
@@ -217,9 +217,9 @@ The five parameters refer to maximum GC content, minimum GC content, minimum map
 			Merge CNV calling results from different methods.      
 <pre>
   python erds_exome.py merge \
-  --datafile_svd $sample_name.svd.maq20.Het.Tag.cnv \
-  --datafile_dis $sample_name.baseline.maq20.Het.Tag.cnv \
-  --output $sample_name.merged.maq20.Het.Tag.cnv
+  --datafile_svd $sample_name.pooled.Het.Tag.cnv \
+  --datafile_dis $sample_name.single.Het.Tag.cnv \
+  --output $sample_name.merged.Het.Tag.cnv
 </pre>
  </blockquote>
 
