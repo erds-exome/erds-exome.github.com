@@ -80,17 +80,17 @@
   python erds_exome.py filter [...]
 </pre>
         <p><strong>4. Normalization.</strong></p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Mode 1:</strong> Single-sample based normalization, normalize RPKM matrix by mappability, GC content and exon length.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>In mode 1:</strong> Single-sample based normalization, normalize RPKM matrix by mappability, GC content and exon length.</p>
 <pre>
   python erds_exome.py norm_rpkm [...]
 </pre>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Mode 2:</strong> Pooled-sample based normalization, normalize RPKM matrix by singular value decomposition (SVD).</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>In mode 2:</strong> Pooled-sample based normalization, normalize RPKM matrix by singular value decomposition (SVD).</p>
 <pre>
   python erds_exome.py svd [...]
 </pre>
         <p><strong>5. CNV calling.</strong></p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Mode 1:</strong> CNV calling by single-sample mode.</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Mode 2:</strong> CNV calling by pooled-sample mode.</p>  
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>In mode 1:</strong> CNV calling by single-sample mode.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>In mode 2:</strong> CNV calling by pooled-sample mode.</p>  
 <pre>
   python erds_exome.py discover [...]
 </pre>
