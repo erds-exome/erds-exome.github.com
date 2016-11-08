@@ -187,7 +187,7 @@ The five parameters refer to minimum GC content, maximum GC content, minimum map
 <pre>
   python erds_exome.py discover \
   --params params.txt \
-  --datafile $RPKM_matrix.raw.filtered.normalized \
+  --rpkm_matrix $RPKM_matrix.raw.filtered.normalized \
   --mode single \
   --sample $sample_name \
   --vcf $snv_vcf_file \
@@ -200,7 +200,7 @@ The five parameters refer to minimum GC content, maximum GC content, minimum map
 <pre>
   python erds_exome.py discover \
   --params params.txt \
-  --datafile $RPKM_matrix.raw.filtered.SVD \
+  --rpkm_matrix $RPKM_matrix.raw.filtered.SVD \
   --mode pooled \
   --sample $sample_name \
   --vcf=$snv_vcf_file \
