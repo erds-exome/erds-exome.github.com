@@ -125,11 +125,11 @@ Where the first column represents the number of chromsome, and the second and th
 <pre>
   python erds_exome.py rpkm \
   --input $bamlist_file \
-  --map $map_score
+  --maq $map_quality
   --target $target_file \
   --output $output_path
 </pre>
-			Where $target_file is the probes/target created in former step, $bamlist_file includes the bam files of all samples, and $map_score is the minimum mapping quality score of reads. The format of $bamlist is like:
+			Where $target_file is the probes/target created in former step, $bamlist_file includes the bam files of all samples, and $map_quality is the minimum mapping quality score of reads. The format of $bamlist is like:
 <pre>
   NA06984	/data/rjtan/1000GP/exome/NA06984.mapped.ILLUMINA.bwa.CEU.exome.20120522.bam	CEU
   NA06985	/data/rjtan/1000GP/exome/NA06985.mapped.ILLUMINA.bwa.CEU.exome.20130415.bam	CEU
